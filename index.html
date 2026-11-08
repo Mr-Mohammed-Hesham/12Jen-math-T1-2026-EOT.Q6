@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📐 Quadratic Formula - رياضيات 12 عام | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي عن حل المعادلات التربيعية باستخدام القانون العام - صف 12 عام">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; direction: ltr; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #d97706; }
+body.en-mode .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #d97706; color: white; box-shadow: 0 2px 6px rgba(217,119,6,0.4); }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+body.en-mode .shuffle-badge { margin-right: 0; margin-left: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.1em; padding: 2px 6px; background: #fef3c7; border-radius: 4px; margin: 2px; color: #92400e; font-weight: 600; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+body.en-mode .save-indicator { left: auto; right: 20px; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; max-width: 100%; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #fef3c7; color: #92400e; }
+.module-2 { background: #dbeafe; color: #1e40af; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #ecfdf5; color: #065f46; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+.module-6 { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-amber-100">
+<span class="text-gray-600 ml-2">⏰ <span data-ar="الوقت المتبقي:" data-en="Time Left:">الوقت المتبقي:</span></span>
+<span id="timer" class="text-2xl font-bold text-amber-700 font-mono">60:00</span>
+<span class="shuffle-badge">📐 <span data-ar="القانون العام" data-en="Quadratic Formula">القانون العام</span> - 30 <span data-ar="سؤال" data-en="Questions">سؤال</span></span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 <span data-ar="إظهار/إخفاء الإجابات" data-en="Show/Hide Answers">إظهار/إخفاء الإجابات</span></button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">🖨️ <span data-ar="طباعة" data-en="Print">طباعة</span></button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 <span data-ar="أسئلة جديدة" data-en="New Questions">أسئلة جديدة</span></button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ <span data-ar="مسح التقدم" data-en="Clear Progress">مسح التقدم</span></button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-amber-500">
+<div class="text-center">
+<div class="inline-block bg-amber-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">MATH GRADE 12 GENERAL - QUESTION 6</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">📐 <span data-ar="حل المعادلات التربيعية باستخدام القانون العام" data-en="Solving Quadratic Equations Using the Quadratic Formula">حل المعادلات التربيعية باستخدام القانون العام</span></h1>
+<h2 class="text-xl text-amber-700 font-semibold mb-2"><span data-ar="رياضيات صف 12 عام - ص 55 (مثال 2 و 3)" data-en="Grade 12 General - Page 55 (Examples 2 & 3)">رياضيات صف 12 عام - ص 55 (مثال 2 و 3)</span></h2>
+<p class="text-gray-600 mb-4"><span data-ar="The Quadratic Formula: x = (-b ± √(b²-4ac)) / 2a" data-en="The Quadratic Formula: x = (-b ± √(b²-4ac)) / 2a">القانون العام: x = (-b ± √(b²-4ac)) / 2a</span></p>
+<p class="text-sm text-green-600 font-semibold">💾 <span data-ar="يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام" data-en="Your progress is auto-saved - 30 questions in 6 sections">يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام</span></p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 <span data-ar="التاريخ:" data-en="Date:">التاريخ:</span> <input type="text" id="examDate" class="border-b-2 border-amber-300 bg-transparent w-32 text-center"></span>
+<span>😊 <span data-ar="الاسم:" data-en="Name:">الاسم:</span> <input type="text" id="studentName" class="border-b-2 border-amber-300 bg-transparent w-40 text-center" data-placeholder-ar="اكتب اسمك" data-placeholder-en="Your name" placeholder="اكتب اسمك"></span>
+<span>🏫 <span data-ar="الشعبة:" data-en="Class:">الشعبة:</span> <input type="text" id="studentClass" class="border-b-2 border-amber-300 bg-transparent w-32 text-center" data-placeholder-ar="الشعبة" data-placeholder-en="Class" placeholder="الشعبة"></span>
+<span>⏰ <span data-ar="المدة: 60 دقيقة" data-en="Duration: 60 min">المدة: 60 دقيقة</span></span>
+<span>📊 <span data-ar="المجموع: 100 درجة" data-en="Total: 100 points">المجموع: 100 درجة</span></span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-amber-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-amber-800 text-center">📐 <span data-ar="القانون العام" data-en="The Quadratic Formula">القانون العام</span></h3>
+<div class="grid md:grid-cols-2 gap-3 text-sm">
+<div class="formula-box">
+<strong><span data-ar="الصيغة:" data-en="Formula:">الصيغة:</span></strong><br>
+<span class="math-display">x = (-b ± √(b² - 4ac)) / 2a</span><br>
+<span data-ar="للمعادلة ax² + bx + c = 0" data-en="For equation ax² + bx + c = 0">للمعادلة ax² + bx + c = 0</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="المميز (Discriminant):" data-en="Discriminant:">المميز (Discriminant):</span></strong><br>
+<span class="math-display">Δ = b² - 4ac</span><br>
+<span data-ar="Δ > 0: حلان حقيقيان | Δ = 0: حل واحد | Δ < 0: لا حلول حقيقية" data-en="Δ > 0: Two real | Δ = 0: One | Δ < 0: No real">Δ > 0: حلان حقيقيان | Δ = 0: حل واحد | Δ < 0: لا حلول حقيقية</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="خطوات الحل:" data-en="Steps:">خطوات الحل:</span></strong><br>
+<span data-ar="1. حدد a, b, c" data-en="1. Identify a, b, c">1. حدد a, b, c</span><br>
+<span data-ar="2. احسب المميز Δ" data-en="2. Calculate Δ">2. احسب المميز Δ</span><br>
+<span data-ar="3. طبّق القانون" data-en="3. Apply formula">3. طبّق القانون</span><br>
+<span data-ar="4. بسّط النتيجة" data-en="4. Simplify">4. بسّط النتيجة</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="أمثلة:" data-en="Examples:">أمثلة:</span></strong><br>
+<span data-ar="x² + 8x + 16 = 0 → a=1, b=8, c=16" data-en="x² + 8x + 16 = 0 → a=1, b=8, c=16">x² + 8x + 16 = 0 → a=1, b=8, c=16</span><br>
+<span data-ar="2x² + 6x - 7 = 0 → a=2, b=6, c=-7" data-en="2x² + 6x - 7 = 0 → a=2, b=6, c=-7">2x² + 6x - 7 = 0 → a=2, b=6, c=-7</span>
+</div>
+</div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105">🎯 <span data-ar="صحح إجاباتي!" data-en="Grade My Exam!">صحح إجاباتي!</span></button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-amber-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 <span data-ar="نتيجتك يا بطل!" data-en="Your Result, Champion!">نتيجتك يا بطل!</span> 🏆</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>😊 <span data-ar="الاسم" data-en="Name">الاسم</span></p><p id="res-name" class="font-bold text-xl text-amber-700">-</p></div>
+<div class="bg-orange-50 p-4 rounded-xl text-center"><p>📅 <span data-ar="التاريخ" data-en="Date">التاريخ</span></p><p id="res-date" class="font-bold text-xl text-orange-700">-</p></div>
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>🌟 <span data-ar="المجموع" data-en="Total">المجموع</span></p><p id="res-total" class="font-bold text-3xl text-amber-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-amber-700 mt-2">0%</p>
+<p class="text-sm text-gray-500"><span data-ar="نسبة النجاح" data-en="Success Rate">نسبة النجاح</span></p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800">📊 <span data-ar="أداؤك في كل قسم:" data-en="Your Performance by Section:">أداؤك في كل قسم:</span></h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-amber-700 to-orange-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 <span data-ar="أرسل النتيجة للمعلم" data-en="Send Result to Teacher">أرسل النتيجة للمعلم</span></button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Quadratic Formula - Grade 12 General | Mr. Mohammed Hesham 📐
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'quadratic_formula_grade12_v1';
+const TOTAL_TIME = 3600;
+const TOTAL_QUESTIONS = 30;
+const TOTAL_SECTIONS = 6;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+let examData;
+let correctAnswersMap = {};
+let rng = null;
+
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+    try {
+        const state = {
+            seed: currentSeed, lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible, savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showIndicator) showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const selected = document.querySelector('input[name="q'+i+'"]:checked');
+        if (selected) answers[i] = selected.value;
+    }
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector('input[name="q'+idx+'"][value="'+val+'"]');
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+}
+
+function setupAnswerListeners() {
+    document.getElementById('exam-content').addEventListener('change', (e) => {
+        if (e.target.type === 'radio') saveState();
+    });
+}
+
+function setupInputListeners() {
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => saveState(false));
+            el.addEventListener('blur', () => saveState());
+        }
+    });
+}
+
+// ==================== SVG DIAGRAMS ====================
+const svgGraphs = {
+    quadratic_formula_visual: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">📐 القانون العام - The Quadratic Formula</text>
+        <!-- Main formula -->
+        <rect x="20" y="45" width="460" height="70" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="75" text-anchor="middle" font-size="16" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">x = (-b ± √(b² - 4ac)) / 2a</text>
+        <text x="250" y="100" text-anchor="middle" font-size="11" fill="#92400e">For equation: ax² + bx + c = 0</text>
+        <!-- Components -->
+        <rect x="20" y="125" width="140" height="80" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="90" y="145" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">a = coefficient</text>
+        <text x="90" y="162" text-anchor="middle" font-size="10" fill="#92400e">of x²</text>
+        <text x="90" y="180" text-anchor="middle" font-size="10" fill="#92400e">معامل x²</text>
+        <text x="90" y="197" text-anchor="middle" font-size="9" fill="#92400e">Example: a=1</text>
+        <rect x="170" y="125" width="140" height="80" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="240" y="145" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">b = coefficient</text>
+        <text x="240" y="162" text-anchor="middle" font-size="10" fill="#92400e">of x</text>
+        <text x="240" y="180" text-anchor="middle" font-size="10" fill="#92400e">معامل x</text>
+        <text x="240" y="197" text-anchor="middle" font-size="9" fill="#92400e">Example: b=8</text>
+        <rect x="320" y="125" width="160" height="80" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="400" y="145" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">c = constant</text>
+        <text x="400" y="162" text-anchor="middle" font-size="10" fill="#92400e">term</text>
+        <text x="400" y="180" text-anchor="middle" font-size="10" fill="#92400e">الحد الثابت</text>
+        <text x="400" y="197" text-anchor="middle" font-size="9" fill="#92400e">Example: c=16</text>
+        <!-- Discriminant -->
+        <rect x="20" y="215" width="460" height="70" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="235" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Discriminant (المميز): Δ = b² - 4ac</text>
+        <text x="250" y="255" text-anchor="middle" font-size="10" fill="#92400e">• Δ &gt; 0: Two distinct real solutions (حلان حقيقيان مختلفان)</text>
+        <text x="250" y="272" text-anchor="middle" font-size="10" fill="#92400e">• Δ = 0: One repeated real solution (حل واحد مكرر)</text>
+        <text x="250" y="289" text-anchor="middle" font-size="10" fill="#92400e">• Δ &lt; 0: No real solutions (لا حلول حقيقية)</text>
+        <!-- Example -->
+        <rect x="20" y="295" width="460" height="65" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="315" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Example: x² + 8x + 16 = 0</text>
+        <text x="250" y="333" text-anchor="middle" font-size="10" fill="#92400e">a=1, b=8, c=16 → Δ = 64 - 64 = 0</text>
+        <text x="250" y="350" text-anchor="middle" font-size="10" fill="#92400e">x = (-8 ± 0)/2 = -4 (one repeated solution)</text>
+    </svg>`,
+    
+    q22_solution: `<svg class="svg-graph" width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="390" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">📝 السؤال 22: x² + 8x + 16 = 0</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="55" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 1: Identify a, b, c</text>
+        <text x="250" y="85" text-anchor="middle" font-size="11" fill="#1e40af">a = 1, b = 8, c = 16</text>
+        <!-- Step 2 -->
+        <rect x="20" y="110" width="460" height="55" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="130" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 2: Calculate Discriminant Δ</text>
+        <text x="250" y="150" text-anchor="middle" font-size="11" fill="#1e40af" font-family="'Amiri', serif">Δ = b² - 4ac = 64 - 64 = 0</text>
+        <text x="250" y="162" text-anchor="middle" font-size="10" fill="#1e40af">Δ = 0 → One repeated solution (حل واحد مكرر)</text>
+        <!-- Step 3 -->
+        <rect x="20" y="175" width="460" height="70" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="195" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Step 3: Apply Quadratic Formula</text>
+        <text x="250" y="215" text-anchor="middle" font-size="12" fill="#1e40af" font-family="'Amiri', serif">x = (-8 ± √0) / 2(1) = -8/2 = -4</text>
+        <text x="250" y="235" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">x = -4 (repeated root / جذر مكرر)</text>
+        <!-- Verification -->
+        <rect x="20" y="255" width="460" height="70" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="275" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">✓ Verification (التحقق):</text>
+        <text x="250" y="293" text-anchor="middle" font-size="10" fill="#92400e" font-family="'Amiri', serif">(-4)² + 8(-4) + 16 = 16 - 32 + 16 = 0 ✓</text>
+        <text x="250" y="310" text-anchor="middle" font-size="10" fill="#92400e">Also: x² + 8x + 16 = (x + 4)² = 0 → x = -4 ✓</text>
+        <!-- Graph -->
+        <rect x="20" y="335" width="460" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="355" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">📊 Graph touches x-axis at x = -4 (vertex)</text>
+        <text x="250" y="375" text-anchor="middle" font-size="10" fill="#92400e">Parabola opens up (a=1 &gt; 0), minimum at (-4, 0)</text>
+    </svg>`,
+    
+    q23_solution: `<svg class="svg-graph" width="500" height="420" viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="410" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">📝 السؤال 23: 2x² + 6x - 7 = 0</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="50" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">Step 1: a = 2, b = 6, c = -7</text>
+        <text x="250" y="85" text-anchor="middle" font-size="10" fill="#9f1239">Note: c is negative!</text>
+        <!-- Step 2 -->
+        <rect x="20" y="105" width="460" height="60" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="125" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">Step 2: Δ = b² - 4ac</text>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#9f1239" font-family="'AmAmiri', serif">Δ = 36 - 4(2)(-7) = 36 + 56 = 92</text>
+        <text x="250" y="160" text-anchor="middle" font-size="10" fill="#9f1239">Δ &gt; 0 → Two distinct real solutions</text>
+        <!-- Step 3 -->
+        <rect x="20" y="175" width="460" height="70" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="195" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">Step 3: Apply Formula</text>
+        <text x="250" y="215" text-anchor="middle" font-size="12" fill="#9f1239" font-family="'Amiri', serif">x = (-6 ± √92) / 4</text>
+        <text x="250" y="235" text-anchor="middle" font-size="11" fill="#9f1239" font-family="'Amiri', serif">x = (-6 ± 2√23) / 4 = (-3 ± √23) / 2</text>
+        <!-- Final answer -->
+        <rect x="20" y="255" width="460" height="60" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="275" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Final Answer:</text>
+        <text x="250" y="295" text-anchor="middle" font-size="13" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">x = (-3 ± √23) / 2 or x = (-3 - √23) / 2</text>
+        <!-- Note -->
+        <rect x="20" y="325" width="460" height="45" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="345" text-anchor="middle" font-size="10" fill="#92400e">√92 = √(4·23) = 2√23</text>
+        <text x="250" y="362" text-anchor="middle" font-size="10" fill="#92400e">Simplify: (-6 ± 2√23)/4 = (-3 ± √23)/2</text>
+    </svg>`,
+    
+    q24_solution: `<svg class="svg-graph" width="500" height="420" viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="410" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">📝 السؤال 24: 3x² + 5x + 1 = 0</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="50" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Step 1: a = 3, b = 5, c = 1</text>
+        <!-- Step 2 -->
+        <rect x="20" y="105" width="460" height="60" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="125" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Step 2: Δ = b² - 4ac</text>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#065f46" font-family="'Amiri', serif">Δ = 25 - 4(3)(1) = 25 - 12 = 13</text>
+        <text x="250" y="160" text-anchor="middle" font-size="10" fill="#065f46">Δ &gt; 0 but not perfect square → irrational solutions</text>
+        <!-- Step 3 -->
+        <rect x="20" y="175" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="195" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Step 3: Apply Formula</text>
+        <text x="250" y="215" text-anchor="middle" font-size="12" fill="#065f46" font-family="'Amiri', serif">x = (-5 ± √13) / 2(3) = (-5 ± √13) / 6</text>
+        <!-- Final answer -->
+        <rect x="20" y="255" width="460" height="60" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="275" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Final Answer:</text>
+        <text x="250" y="295" text-anchor="middle" font-size="13" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">x = (-5 + √13)/6 or x = (-5 - √13)/6</text>
+        <!-- Note -->
+        <rect x="20" y="325" width="460" height="45" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="345" text-anchor="middle" font-size="10" fill="#92400e">√13 cannot be simplified (13 is prime)</text>
+        <text x="250" y="362" text-anchor="middle" font-size="10" fill="#92400e">Solutions are irrational numbers</text>
+    </svg>`,
+    
+    q25_solution: `<svg class="svg-graph" width="500" height="420" viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="410" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">📝 السؤال 25: x² - 8x + 9 = 0</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="50" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 1: a = 1, b = -8, c = 9</text>
+        <text x="250" y="85" text-anchor="middle" font-size="10" fill="#5b21b6">Note: b is negative!</text>
+        <!-- Step 2 -->
+        <rect x="20" y="105" width="460" height="60" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="125" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 2: Δ = b² - 4ac</text>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#5b21b6" font-family="'Amiri', serif">Δ = 64 - 4(1)(9) = 64 - 36 = 28</text>
+        <text x="250" y="160" text-anchor="middle" font-size="10" fill="#5b21b6">Δ &gt; 0 → Two distinct real solutions</text>
+        <!-- Step 3 -->
+        <rect x="20" y="175" width="460" height="70" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="195" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 3: Apply Formula</text>
+        <text x="250" y="215" text-anchor="middle" font-size="12" fill="#5b21b6" font-family="'Amiri', serif">x = (8 ± √28) / 2</text>
+        <text x="250" y="235" text-anchor="middle" font-size="11" fill="#5b21b6" font-family="'Amiri', serif">√28 = √(4·7) = 2√7</text>
+        <text x="250" y="250" text-anchor="middle" font-size="11" fill="#5b21b6" font-family="'Amiri', serif">x = (8 ± 2√7) / 2 = 4 ± √7</text>
+        <!-- Final answer -->
+        <rect x="20" y="260" width="460" height="60" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="280" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Final Answer:</text>
+        <text x="250" y="300" text-anchor="middle" font-size="13" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">x = 4 + √7 or x = 4 - √7</text>
+        <!-- Approximate values -->
+        <rect x="20" y="330" width="460" height="45" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="350" text-anchor="middle" font-size="10" fill="#92400e">Approximate: √7 ≈ 2.646</text>
+        <text x="250" y="367" text-anchor="middle" font-size="10" fill="#92400e">x ≈ 6.646 or x ≈ 1.354</text>
+    </svg>`,
+    
+    discriminant_visual: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">📊 المميز وعدد الحلول - Discriminant</text>
+        <!-- Case 1: Δ > 0 -->
+        <rect x="20" y="45" width="140" height="130" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="90" y="65" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Δ &gt; 0</text>
+        <text x="90" y="82" text-anchor="middle" font-size="10" fill="#991b1b">Two solutions</text>
+        <!-- Parabola crossing x-axis twice -->
+        <path d="M 30 150 Q 60 100 90 80 Q 120 100 150 150" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <line x1="30" y1="150" x2="150" y2="150" stroke="#374151" stroke-width="1"/>
+        <circle cx="60" cy="150" r="3" fill="#dc2626"/>
+        <circle cx="120" cy="150" r="3" fill="#dc2626"/>
+        <text x="90" y="170" text-anchor="middle" font-size="9" fill="#991b1b">2 x-intercepts</text>
+        <!-- Case 2: Δ = 0 -->
+        <rect x="180" y="45" width="140" height="130" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Δ = 0</text>
+        <text x="250" y="82" text-anchor="middle" font-size="10" fill="#991b1b">One solution</text>
+        <!-- Parabola touching x-axis -->
+        <path d="M 190 150 Q 220 100 250 80 Q 280 100 310 150" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <line x1="190" y1="150" x2="310" y2="150" stroke="#374151" stroke-width="1"/>
+        <circle cx="250" cy="150" r="4" fill="#dc2626"/>
+        <text x="250" y="170" text-anchor="middle" font-size="9" fill="#991b1b">1 x-intercept (vertex)</text>
+        <!-- Case 3: Δ < 0 -->
+        <rect x="340" y="45" width="140" height="130" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="410" y="65" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Δ &lt; 0</text>
+        <text x="410" y="82" text-anchor="middle" font-size="10" fill="#991b1b">No real solutions</text>
+        <!-- Parabola above x-axis -->
+        <path d="M 350 130 Q 380 100 410 90 Q 440 100 470 130" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <line x1="350" y1="150" x2="470" y2="150" stroke="#374151" stroke-width="1"/>
+        <text x="410" y="170" text-anchor="middle" font-size="9" fill="#991b1b">No x-intercepts</text>
+        <!-- Examples -->
+        <rect x="20" y="190" width="460" height="175" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="210" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Examples from Questions:</text>
+        <text x="250" y="230" text-anchor="middle" font-size="10" fill="#92400e">Q22: x² + 8x + 16 = 0 → Δ = 64-64 = 0 → One solution: x = -4</text>
+        <text x="250" y="250" text-anchor="middle" font-size="10" fill="#92400e">Q23: 2x² + 6x - 7 = 0 → Δ = 36+56 = 92 &gt; 0 → Two solutions</text>
+        <text x="250" y="270" text-anchor="middle" font-size="10" fill="#92400e">Q24: 3x² + 5x + 1 = 0 → Δ = 25-12 = 13 &gt; 0 → Two irrational solutions</text>
+        <text x="250" y="290" text-anchor="middle" font-size="10" fill="#92400e">Q25: x² - 8x + 9 = 0 → Δ = 64-36 = 28 &gt; 0 → Two solutions: 4 ± √7</text>
+        <text x="250" y="315" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">Key: Δ tells us the NUMBER and NATURE of solutions</text>
+        <text x="250" y="335" text-anchor="middle" font-size="9" fill="#92400e">Perfect square Δ → rational solutions | Non-perfect square Δ → irrational</text>
+        <text x="250" y="352" text-anchor="middle" font-size="9" fill="#92400e">Negative Δ → complex solutions (not in real numbers)</text>
+    </svg>`,
+    
+    step_by_step: `<svg class="svg-graph" width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="390" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">📋 خطوات حل المعادلة التربيعية</text>
+        <!-- Step 1 -->
+        <rect x="20" y="45" width="460" height="60" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Step 1: Write in standard form ax² + bx + c = 0</text>
+        <text x="250" y="83" text-anchor="middle" font-size="10" fill="#92400e">Example: 2x² + 6x - 7 = 0 → a=2, b=6, c=-7</text>
+        <text x="250" y="98" text-anchor="middle" font-size="9" fill="#92400e">⚠️ Make sure equation equals ZERO first!</text>
+        <!-- Step 2 -->
+        <rect x="20" y="115" width="460" height="60" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="135" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Step 2: Calculate Discriminant Δ = b² - 4ac</text>
+        <text x="250" y="153" text-anchor="middle" font-size="10" fill="#92400e">Δ = 36 - 4(2)(-7) = 36 + 56 = 92</text>
+        <text x="250" y="168" text-anchor="middle" font-size="9" fill="#92400e">Δ &gt; 0 → Two real solutions exist</text>
+        <!-- Step 3 -->
+        <rect x="20" y="185" width="460" height="60" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="205" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Step 3: Substitute into Quadratic Formula</text>
+        <text x="250" y="223" text-anchor="middle" font-size="11" fill="#92400e" font-family="'Amiri', serif">x = (-6 ± √92) / 2(2) = (-6 ± 2√23) / 4</text>
+        <text x="250" y="238" text-anchor="middle" font-size="9" fill="#92400e">Be careful with signs, especially when b is negative!</text>
+        <!-- Step 4 -->
+        <rect x="20" y="255" width="460" height="60" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="275" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Step 4: Simplify the Result</text>
+        <text x="250" y="293" text-anchor="middle" font-size="11" fill="#92400e" font-family="'Amiri', serif">x = (-3 ± √23) / 2</text>
+        <text x="250" y="308" text-anchor="middle" font-size="9" fill="#92400e">Factor out common terms, simplify radicals</text>
+        <!-- Common mistakes -->
+        <rect x="20" y="325" width="460" height="60" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="345" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">⚠️ Common Mistakes:</text>
+        <text x="250" y="362" text-anchor="middle" font-size="9" fill="#991b1b">• Forgetting ± (two solutions) • Sign errors with negative b or c</text>
+        <text x="250" y="377" text-anchor="middle" font-size="9" fill="#991b1b">• Not simplifying √92 = 2√23 • Dividing only part of numerator</text>
+    </svg>`,
+    
+    comparison_methods: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">⚖️ مقارنة طرق الحل - Comparing Methods</text>
+        <!-- Factoring -->
+        <rect x="20" y="45" width="145" height="130" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="92" y="65" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Factoring</text>
+        <text x="92" y="82" text-anchor="middle" font-size="10" fill="#1e40af">التحليل</text>
+        <text x="92" y="100" text-anchor="middle" font-size="9" fill="#1e40af">✓ Fast when easy</text>
+        <text x="92" y="115" text-anchor="middle" font-size="9" fill="#1e40af">✗ Doesn't always work</text>
+        <text x="92" y="130" text-anchor="middle" font-size="9" fill="#1e40af">Best for: simple cases</text>
+        <text x="92" y="145" text-anchor="middle" font-size="9" fill="#1e40af">مثل: x² + 5x + 6 = 0</text>
+        <text x="92" y="160" text-anchor="middle" font-size="9" fill="#1e40af">→ (x+2)(x+3) = 0</text>
+        <!-- Completing Square -->
+        <rect x="175" y="45" width="145" height="130" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="247" y="65" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Completing Square</text>
+        <text x="247" y="82" text-anchor="middle" font-size="10" fill="#1e40af">إكمال المربع</text>
+        <text x="247" y="100" text-anchor="middle" font-size="9" fill="#1e40af">✓ Shows vertex form</text>
+        <text x="247" y="115" text-anchor="middle" font-size="9" fill="#1e40af">✗ Can be complex</text>
+        <text x="247" y="130" text-anchor="middle" font-size="9" fill="#1e40af">Best for: vertex form</text>
+        <text x="247" y="145" text-anchor="middle" font-size="9" fill="#1e40af">مثل: x² + 6x + 5 = 0</text>
+        <text x="247" y="160" text-anchor="middle" font-size="9" fill="#1e40af">→ (x+3)² - 4 = 0</text>
+        <!-- Quadratic Formula -->
+        <rect x="330" y="45" width="145" height="130" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="402" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Quadratic Formula</text>
+        <text x="402" y="82" text-anchor="middle" font-size="10" fill="#92400e">القانون العام ⭐</text>
+        <text x="402" y="100" text-anchor="middle" font-size="9" fill="#92400e">✓ Always works!</text>
+        <text x="402" y="115" text-anchor="middle" font-size="9" fill="#92400e">✗ More calculation</text>
+        <text x="402" y="130" text-anchor="middle" font-size="9" fill="#92400e">Best for: ALL cases</text>
+        <text x="402" y="145" text-anchor="middle" font-size="9" fill="#92400e">مثل: 2x² + 6x - 7 = 0</text>
+        <text x="402" y="160" text-anchor="middle" font-size="9" fill="#92400e">→ x = (-6±√92)/4</text>
+        <!-- When to use -->
+        <rect x="20" y="190" width="460" height="80" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="210" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">🎯 When to Use Quadratic Formula:</text>
+        <text x="250" y="228" text-anchor="middle" font-size="10" fill="#92400e">1. When factoring is difficult or impossible</text>
+        <text x="250" y="245" text-anchor="middle" font-size="10" fill="#92400e">2. When coefficients are large or fractions</text>
+        <text x="250" y="262" text-anchor="middle" font-size="10" fill="#92400e">3. When you need exact irrational solutions</text>
+        <text x="250" y="278" text-anchor="middle" font-size="10" fill="#92400e">4. When you want to determine nature of roots (using Δ)</text>
+        <!-- Summary -->
+        <rect x="20" y="280" width="460" height="85" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="300" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">📊 Summary:</text>
+        <text x="250" y="318" text-anchor="middle" font-size="10" fill="#92400e">• Quadratic Formula is the UNIVERSAL method</text>
+        <text x="250" y="335" text-anchor="middle" font-size="10" fill="#92400e">• It works for ALL quadratic equations</text>
+        <text x="250" y="352" text-anchor="middle" font-size="10" fill="#92400e">• The discriminant Δ tells you about the solutions</text>
+        <text x="250" y="368" text-anchor="middle" font-size="9" fill="#92400e">• Always check your answers by substituting back!</text>
+    </svg>`,
+    
+    practice_problems: `<svg class="svg-graph" width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="390" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">📝 Practice Problems with Solutions</text>
+        <!-- Problem 1 -->
+        <rect x="20" y="45" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Problem 1: x² - 4x - 5 = 0</text>
+        <text x="250" y="83" text-anchor="middle" font-size="10" fill="#065f46">a=1, b=-4, c=-5 → Δ = 16+20 = 36</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#065f46" font-family="'Amiri', serif">x = (4 ± 6)/2 → x = 5 or x = -1</text>
+        <text x="250" y="113" text-anchor="middle" font-size="9" fill="#065f46">Check: (5)² - 4(5) - 5 = 25-20-5 = 0 ✓</text>
+        <!-- Problem 2 -->
+        <rect x="20" y="125" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Problem 2: 2x² + 3x - 2 = 0</text>
+        <text x="250" y="163" text-anchor="middle" font-size="10" fill="#065f46">a=2, b=3, c=-2 → Δ = 9+16 = 25</text>
+        <text x="250" y="180" text-anchor="middle" font-size="10" fill="#065f46" font-family="'Amiri', serif">x = (-3 ± 5)/4 → x = 1/2 or x = -2</text>
+        <text x="250" y="193" text-anchor="middle" font-size="9" fill="#065f46">Check: 2(1/2)² + 3(1/2) - 2 = 1/2 + 3/2 - 2 = 0 ✓</text>
+        <!-- Problem 3 -->
+        <rect x="20" y="205" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="225" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Problem 3: x² + 2x + 5 = 0</text>
+        <text x="250" y="243" text-anchor="middle" font-size="10" fill="#065f46">a=1, b=2, c=5 → Δ = 4-20 = -16 &lt; 0</text>
+        <text x="250" y="260" text-anchor="middle" font-size="10" fill="#065f46" font-family="'Amiri', serif">No real solutions (Δ &lt; 0)</text>
+        <text x="250" y="273" text-anchor="middle" font-size="9" fill="#065f46">Parabola doesn't cross x-axis</text>
+        <!-- Problem 4 -->
+        <rect x="20" y="285" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="305" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Problem 4: 4x² - 12x + 9 = 0</text>
+        <text x="250" y="323" text-anchor="middle" font-size="10" fill="#065f46">a=4, b=-12, c=9 → Δ = 144-144 = 0</text>
+        <text x="250" y="340" text-anchor="middle" font-size="10" fill="#065f46" font-family="'Amiri', serif">x = 12/8 = 3/2 (one repeated solution)</text>
+        <text x="250" y="353" text-anchor="middle" font-size="9" fill="#065f46">Also: (2x-3)² = 0 → x = 3/2 ✓</text>
+    </svg>`
+};
+
+// ==================== EXAM DATA - 30 QUESTIONS ====================
+const originalExamData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 القسم 1: مفهوم القانون العام (Q1-Q5)', en: '🔹 Section 1: Quadratic Formula Concept (Q1-Q5)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 1:</strong> ما هو القانون العام لحل المعادلات التربيعية؟', en: '<strong>Question 1:</strong> What is the quadratic formula?' },
+                    svg: svgGraphs.quadratic_formula_visual,
+                    options: [
+                        { ar: '<span class="math-display">x = (-b ± √(b² - 4ac)) / 2a</span>', en: '<span class="math-display">x = (-b ± √(b² - 4ac)) / 2a</span>' },
+                        { ar: '<span class="math-display">x = (-b ± √(b² + 4ac)) / 2a</span>', en: '<span class="math-display">x = (-b ± √(b² + 4ac)) / 2a</span>' },
+                        { ar: '<span class="math-display">x = (b ± √(b² - 4ac)) / 2a</span>', en: '<span class="math-display">x = (b ± √(b² - 4ac)) / 2a</span>' },
+                        { ar: '<span class="math-display">x = (-b ± √(b² - 4ac)) / a</span>', en: '<span class="math-display">x = (-b ± √(b² - 4ac)) / a</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'القانون العام هو: x = (-b ± √(b² - 4ac)) / 2a للمعادلة ax² + bx + c = 0', en: 'The quadratic formula is: x = (-b ± √(b² - 4ac)) / 2a for ax² + bx + c = 0' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 2:</strong> ما هو المميز (Discriminant) في القانون العام؟', en: '<strong>Question 2:</strong> What is the discriminant in the quadratic formula?' },
+                    options: [
+                        { ar: '<span class="math-display">Δ = b² - 4ac</span>', en: '<span class="math-display">Δ = b² - 4ac</span>' },
+                        { ar: '<span class="math-display">Δ = b² + 4ac</span>', en: '<span class="math-display">Δ = b² + 4ac</span>' },
+                        { ar: '<span class="math-display">Δ = 4ac - b²</span>', en: '<span class="math-display">Δ = 4ac - b²</span>' },
+                        { ar: '<span class="math-display">Δ = b - 4ac</span>', en: '<span class="math-display">Δ = b - 4ac</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'المميز Δ = b² - 4ac، وهو ما تحت الجذر في القانون العام', en: 'Discriminant Δ = b² - 4ac, the expression under the square root' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 3:</strong> إذا كان Δ > 0، فكم عدد الحلول الحقيقية؟', en: '<strong>Question 3:</strong> If Δ > 0, how many real solutions are there?' },
+                    options: [
+                        { ar: 'حلان حقيقيان مختلفان', en: 'Two distinct real solutions' },
+                        { ar: 'حل واحد حقيقي', en: 'One real solution' },
+                        { ar: 'لا توجد حلول حقيقية', en: 'No real solutions' },
+                        { ar: 'أربعة حلول', en: 'Four solutions' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'عندما Δ > 0، يوجد حلان حقيقيان مختلفان (الرسم يقطع المحور x في نقطتين)', en: 'When Δ > 0, there are two distinct real solutions (graph crosses x-axis twice)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 4:</strong> إذا كان Δ = 0، فكم عدد الحلول الحقيقية؟', en: '<strong>Question 4:</strong> If Δ = 0, how many real solutions are there?' },
+                    options: [
+                        { ar: 'حل واحد حقيقي مكرر', en: 'One repeated real solution' },
+                        { ar: 'حلان حقيقيان مختلفان', en: 'Two distinct real solutions' },
+                        { ar: 'لا توجد حلول', en: 'No solutions' },
+                        { ar: 'عدد لا نهائي من الحلول', en: 'Infinite solutions' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'عندما Δ = 0، يوجد حل واحد حقيقي مكرر (الرسم يمس المحور x في نقطة واحدة)', en: 'When Δ = 0, there is one repeated real solution (graph touches x-axis at one point)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 5:</strong> إذا كان Δ < 0، فكم عدد الحلول الحقيقية؟', en: '<strong>Question 5:</strong> If Δ < 0, how many real solutions are there?' },
+                    options: [
+                        { ar: 'لا توجد حلول حقيقية', en: 'No real solutions' },
+                        { ar: 'حل واحد', en: 'One solution' },
+                        { ar: 'حلان حقيقيان', en: 'Two real solutions' },
+                        { ar: 'عدد لا نهائي', en: 'Infinite solutions' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'عندما Δ < 0، لا توجد حلول حقيقية (الرسم لا يقطع المحور x)', en: 'When Δ < 0, there are no real solutions (graph does not cross x-axis)' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: '🔹 القسم 2: مثل السؤال 22 - Δ = 0 (Q6-Q10)', en: '🔹 Section 2: Like Q22 - Δ = 0 (Q6-Q10)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 6 (مثل السؤال 22):</strong> حُلّ المعادلة <span class="math-display">x² + 8x + 16 = 0</span> باستخدام القانون العام.', en: '<strong>Question 6 (like Q22):</strong> Solve <span class="math-display">x² + 8x + 16 = 0</span> using the quadratic formula.' },
+                    svg: svgGraphs.q22_solution,
+                    options: [
+                        { ar: '<span class="math-display">-4</span>', en: '<span class="math-display">-4</span>' },
+                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+                        { ar: '<span class="math-display">-8</span>', en: '<span class="math-display">-8</span>' },
+                        { ar: '<span class="math-display">±4</span>', en: '<span class="math-display">±4</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=1, b=8, c=16. Δ = 64-64 = 0. x = (-8 ± 0)/2 = -4. حل واحد مكرر: x = -4', en: 'a=1, b=8, c=16. Δ = 0. x = -8/2 = -4. One repeated solution: x = -4' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 7:</strong> حُلّ المعادلة <span class="math-display">x² + 6x + 9 = 0</span> باستخدام القانون العام.', en: '<strong>Question 7:</strong> Solve <span class="math-display">x² + 6x + 9 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">-3</span>', en: '<span class="math-display">-3</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">±3</span>', en: '<span class="math-display">±3</span>' },
+                        { ar: '<span class="math-display">-6</span>', en: '<span class="math-display">-6</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=1, b=6, c=9. Δ = 36-36 = 0. x = (-6 ± 0)/2 = -3. حل واحد: x = -3', en: 'a=1, b=6, c=9. Δ = 0. x = -6/2 = -3. One solution: x = -3' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 8:</strong> حُلّ المعادلة <span class="math-display">4x² - 12x + 9 = 0</span> باستخدام القانون العام.', en: '<strong>Question 8:</strong> Solve <span class="math-display">4x² - 12x + 9 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">3/2</span>', en: '<span class="math-display">3/2</span>' },
+                        { ar: '<span class="math-display">-3/2</span>', en: '<span class="math-display">-3/2</span>' },
+                        { ar: '<span class="math-display">±3/2</span>', en: '<span class="math-display">±3/2</span>' },
+                        { ar: '<span class="math-display">9/4</span>', en: '<span class="math-display">9/4</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=4, b=-12, c=9. Δ = 144-144 = 0. x = (12 ± 0)/8 = 3/2. حل واحد: x = 3/2', en: 'a=4, b=-12, c=9. Δ = 0. x = 12/8 = 3/2. One solution: x = 3/2' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 9:</strong> حُلّ المعادلة <span class="math-display">x² - 10x + 25 = 0</span> باستخدام القانون العام.', en: '<strong>Question 9:</strong> Solve <span class="math-display">x² - 10x + 25 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">-5</span>', en: '<span class="math-display">-5</span>' },
+                        { ar: '<span class="math-display">±5</span>', en: '<span class="math-display">±5</span>' },
+                        { ar: '<span class="math-display">25</span>', en: '<span class="math-display">25</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=1, b=-10, c=25. Δ = 100-100 = 0. x = (10 ± 0)/2 = 5. حل واحد: x = 5', en: 'a=1, b=-10, c=25. Δ = 0. x = 10/2 = 5. One solution: x = 5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 10:</strong> حُلّ المعادلة <span class="math-display">9x² + 6x + 1 = 0</span> باستخدام القانون العام.', en: '<strong>Question 10:</strong> Solve <span class="math-display">9x² + 6x + 1 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">-1/3</span>', en: '<span class="math-display">-1/3</span>' },
+                        { ar: '<span class="math-display">1/3</span>', en: '<span class="math-display">1/3</span>' },
+                        { ar: '<span class="math-display">±1/3</span>', en: '<span class="math-display">±1/3</span>' },
+                        { ar: '<span class="math-display">-3</span>', en: '<span class="math-display">-3</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=9, b=6, c=1. Δ = 36-36 = 0. x = (-6 ± 0)/18 = -1/3. حل واحد: x = -1/3', en: 'a=9, b=6, c=1. Δ = 0. x = -6/18 = -1/3. One solution: x = -1/3' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 القسم 3: مثل السؤال 23 - Δ موجب غير مربع كامل (Q11-Q15)', en: '🔹 Section 3: Like Q23 - Δ Positive Non-Perfect Square (Q11-Q15)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 11 (مثل السؤال 23):</strong> حُلّ المعادلة <span class="math-display">2x² + 6x - 7 = 0</span> باستخدام القانون العام.', en: '<strong>Question 11 (like Q23):</strong> Solve <span class="math-display">2x² + 6x - 7 = 0</span> using the quadratic formula.' },
+                    svg: svgGraphs.q23_solution,
+                    options: [
+                        { ar: '<span class="math-display">(-3 ± √23) / 2</span>', en: '<span class="math-display">(-3 ± √23) / 2</span>' },
+                        { ar: '<span class="math-display">(3 ± √23) / 2</span>', en: '<span class="math-display">(3 ± √23) / 2</span>' },
+                        { ar: '<span class="math-display">(-6 ± √23) / 2</span>', en: '<span class="math-display">(-6 ± √23) / 2</span>' },
+                        { ar: '<span class="math-display">(-3 ± √5) / 2</span>', en: '<span class="math-display">(-3 ± √5) / 2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=2, b=6, c=-7. Δ = 36+56 = 92. x = (-6 ± √92)/4 = (-6 ± 2√23)/4 = (-3 ± √23)/2', en: 'a=2, b=6, c=-7. Δ = 92. x = (-6 ± 2√23)/4 = (-3 ± √23)/2' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 12:</strong> حُلّ المعادلة <span class="math-display">x² + 4x - 1 = 0</span> باستخدام القانون العام.', en: '<strong>Question 12:</strong> Solve <span class="math-display">x² + 4x - 1 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">-2 ± √5</span>', en: '<span class="math-display">-2 ± √5</span>' },
+                        { ar: '<span class="math-display">2 ± √5</span>', en: '<span class="math-display">2 ± √5</span>' },
+                        { ar: '<span class="math-display">-4 ± √5</span>', en: '<span class="math-display">-4 ± √5</span>' },
+                        { ar: '<span class="math-display">-2 ± √3</span>', en: '<span class="math-display">-2 ± √3</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=1, b=4, c=-1. Δ = 16+4 = 20. x = (-4 ± √20)/2 = (-4 ± 2√5)/2 = -2 ± √5', en: 'a=1, b=4, c=-1. Δ = 20. x = (-4 ± 2√5)/2 = -2 ± √5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 13:</strong> حُلّ المعادلة <span class="math-display">3x² - 2x - 4 = 0</span> باستخدام القانون العام.', en: '<strong>Question 13:</strong> Solve <span class="math-display">3x² - 2x - 4 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">(1 ± √13) / 3</span>', en: '<span class="math-display">(1 ± √13) / 3</span>' },
+                        { ar: '<span class="math-display">(-1 ± √13) / 3</span>', en: '<span class="math-display">(-1 ± √13) / 3</span>' },
+                        { ar: '<span class="math-display">(2 ± √13) / 3</span>', en: '<span class="math-display">(2 ± √13) / 3</span>' },
+                        { ar: '<span class="math-display">(1 ± √52) / 6</span>', en: '<span class="math-display">(1 ± √52) / 6</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=3, b=-2, c=-4. Δ = 4+48 = 52. x = (2 ± √52)/6 = (2 ± 2√13)/6 = (1 ± √13)/3', en: 'a=3, b=-2, c=-4. Δ = 52. x = (2 ± 2√13)/6 = (1 ± √13)/3' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 14:</strong> حُلّ المعادلة <span class="math-display">x² - 6x + 2 = 0</span> باستخدام القانون العام.', en: '<strong>Question 14:</strong> Solve <span class="math-display">x² - 6x + 2 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">3 ± √7</span>', en: '<span class="math-display">3 ± √7</span>' },
+                        { ar: '<span class="math-display">-3 ± √7</span>', en: '<span class="math-display">-3 ± √7</span>' },
+                        { ar: '<span class="math-display">6 ± √7</span>', en: '<span class="math-display">6 ± √7</span>' },
+                        { ar: '<span class="math-display">3 ± √34</span>', en: '<span class="math-display">3 ± √34</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=1, b=-6, c=2. Δ = 36-8 = 28. x = (6 ± √28)/2 = (6 ± 2√7)/2 = 3 ± √7', en: 'a=1, b=-6, c=2. Δ = 28. x = (6 ± 2√7)/2 = 3 ± √7' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 15:</strong> حُلّ المعادلة <span class="math-display">2x² - 4x - 3 = 0</span> باستخدام القانون العام.', en: '<strong>Question 15:</strong> Solve <span class="math-display">2x² - 4x - 3 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">(2 ± √10) / 2</span>', en: '<span class="math-display">(2 ± √10) / 2</span>' },
+                        { ar: '<span class="math-display">(-2 ± √10) / 2</span>', en: '<span class="math-display">(-2 ± √10) / 2</span>' },
+                        { ar: '<span class="math-display">(4 ± √10) / 2</span>', en: '<span class="math-display">(4 ± √10) / 2</span>' },
+                        { ar: '<span class="math-display">(2 ± √40) / 4</span>', en: '<span class="math-display">(2 ± √40) / 4</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=2, b=-4, c=-3. Δ = 16+24 = 40. x = (4 ± √40)/4 = (4 ± 2√10)/4 = (2 ± √10)/2', en: 'a=2, b=-4, c=-3. Δ = 40. x = (4 ± 2√10)/4 = (2 ± √10)/2' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: '🔹 القسم 4: مثل السؤال 24 - معاملات أكبر (Q16-Q20)', en: '🔹 Section 4: Like Q24 - Larger Coefficients (Q16-Q20)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 16 (مثل السؤال 24):</strong> حُلّ المعادلة <span class="math-display">3x² + 5x + 1 = 0</span> باستخدام القانون العام.', en: '<strong>Question 16 (like Q24):</strong> Solve <span class="math-display">3x² + 5x + 1 = 0</span> using the quadratic formula.' },
+                    svg: svgGraphs.q24_solution,
+                    options: [
+                        { ar: '<span class="math-display">(-5 ± √13) / 6</span>', en: '<span class="math-display">(-5 ± √13) / 6</span>' },
+                        { ar: '<span class="math-display">(5 ± √13) / 6</span>', en: '<span class="math-display">(5 ± √13) / 6</span>' },
+                        { ar: '<span class="math-display">(-5 ± √37) / 6</span>', en: '<span class="math-display">(-5 ± √37) / 6</span>' },
+                        { ar: '<span class="math-display">(-5 ± √13) / 3</span>', en: '<span class="math-display">(-5 ± √13) / 3</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=3, b=5, c=1. Δ = 25-12 = 13. x = (-5 ± √13)/6', en: 'a=3, b=5, c=1. Δ = 13. x = (-5 ± √13)/6' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 17:</strong> حُلّ المعادلة <span class="math-display">2x² + 7x + 3 = 0</span> باستخدام القانون العام.', en: '<strong>Question 17:</strong> Solve <span class="math-display">2x² + 7x + 3 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">(-7 ± √25) / 4 = -1/2 أو -3</span>', en: '<span class="math-display">(-7 ± 5) / 4 = -1/2 or -3</span>' },
+                        { ar: '<span class="math-display">(7 ± √25) / 4</span>', en: '<span class="math-display">(7 ± √25) / 4</span>' },
+                        { ar: '<span class="math-display">(-7 ± √73) / 4</span>', en: '<span class="math-display">(-7 ± √73) / 4</span>' },
+                        { ar: '<span class="math-display">(-7 ± 5) / 2</span>', en: '<span class="math-display">(-7 ± 5) / 2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=2, b=7, c=3. Δ = 49-24 = 25. x = (-7 ± 5)/4. x = -1/2 أو x = -3', en: 'a=2, b=7, c=3. Δ = 25. x = (-7 ± 5)/4. x = -1/2 or x = -3' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 18:</strong> حُلّ المعادلة <span class="math-display">5x² - 3x - 2 = 0</span> باستخدام القانون العام.', en: '<strong>Question 18:</strong> Solve <span class="math-display">5x² - 3x - 2 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">1 أو -2/5</span>', en: '<span class="math-display">1 or -2/5</span>' },
+                        { ar: '<span class="math-display">-1 أو 2/5</span>', en: '<span class="math-display">-1 or 2/5</span>' },
+                        { ar: '<span class="math-display">(3 ± √49) / 10</span>', en: '<span class="math-display">(3 ± √49) / 10</span>' },
+                        { ar: '<span class="math-display">(3 ± 7) / 10</span>', en: '<span class="math-display">(3 ± 7) / 10</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=5, b=-3, c=-2. Δ = 9+40 = 49. x = (3 ± 7)/10. x = 1 أو x = -2/5', en: 'a=5, b=-3, c=-2. Δ = 49. x = (3 ± 7)/10. x = 1 or x = -2/5' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 19:</strong> حُلّ المعادلة <span class="math-display">4x² + 4x - 3 = 0</span> باستخدام القانون العام.', en: '<strong>Question 19:</strong> Solve <span class="math-display">4x² + 4x - 3 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">1/2 أو -3/2</span>', en: '<span class="math-display">1/2 or -3/2</span>' },
+                        { ar: '<span class="math-display">-1/2 أو 3/2</span>', en: '<span class="math-display">-1/2 or 3/2</span>' },
+                        { ar: '<span class="math-display">1 أو -3/4</span>', en: '<span class="math-display">1 or -3/4</span>' },
+                        { ar: '<span class="math-display">-1 أو 3/4</span>', en: '<span class="math-display">-1 or 3/4</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=4, b=4, c=-3. Δ = 16+48 = 64. x = (-4 ± 8)/8. x = 1/2 أو x = -3/2', en: 'a=4, b=4, c=-3. Δ = 64. x = (-4 ± 8)/8. x = 1/2 or x = -3/2' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 20:</strong> حُلّ المعادلة <span class="math-display">6x² - x - 2 = 0</span> باستخدام القانون العام.', en: '<strong>Question 20:</strong> Solve <span class="math-display">6x² - x - 2 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">2/3 أو -1/2</span>', en: '<span class="math-display">2/3 or -1/2</span>' },
+                        { ar: '<span class="math-display">-2/3 أو 1/2</span>', en: '<span class="math-display">-2/3 or 1/2</span>' },
+                        { ar: '<span class="math-display">1/3 أو -2</span>', en: '<span class="math-display">1/3 or -2</span>' },
+                        { ar: '<span class="math-display">2 أو -1/3</span>', en: '<span class="math-display">2 or -1/3</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=6, b=-1, c=-2. Δ = 1+48 = 49. x = (1 ± 7)/12. x = 2/3 أو x = -1/2', en: 'a=6, b=-1, c=-2. Δ = 49. x = (1 ± 7)/12. x = 2/3 or x = -1/2' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 القسم 5: مثل السؤال 25 - تبسيط الجذور (Q21-Q25)', en: '🔹 Section 5: Like Q25 - Simplifying Radicals (Q21-Q25)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 21 (مثل السؤال 25):</strong> حُلّ المعادلة <span class="math-display">x² - 8x + 9 = 0</span> باستخدام القانون العام.', en: '<strong>Question 21 (like Q25):</strong> Solve <span class="math-display">x² - 8x + 9 = 0</span> using the quadratic formula.' },
+                    svg: svgGraphs.q25_solution,
+                    options: [
+                        { ar: '<span class="math-display">4 ± √7</span>', en: '<span class="math-display">4 ± √7</span>' },
+                        { ar: '<span class="math-display">-4 ± √7</span>', en: '<span class="math-display">-4 ± √7</span>' },
+                        { ar: '<span class="math-display">8 ± √7</span>', en: '<span class="math-display">8 ± √7</span>' },
+                        { ar: '<span class="math-display">4 ± 2√7</span>', en: '<span class="math-display">4 ± 2√7</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=1, b=-8, c=9. Δ = 64-36 = 28. x = (8 ± √28)/2 = (8 ± 2√7)/2 = 4 ± √7', en: 'a=1, b=-8, c=9. Δ = 28. x = (8 ± 2√7)/2 = 4 ± √7' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 22:</strong> حُلّ المعادلة <span class="math-display">x² - 4x - 3 = 0</span> باستخدام القانون العام.', en: '<strong>Question 22:</strong> Solve <span class="math-display">x² - 4x - 3 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">2 ± √7</span>', en: '<span class="math-display">2 ± √7</span>' },
+                        { ar: '<span class="math-display">-2 ± √7</span>', en: '<span class="math-display">-2 ± √7</span>' },
+                        { ar: '<span class="math-display">4 ± √7</span>', en: '<span class="math-display">4 ± √7</span>' },
+                        { ar: '<span class="math-display">2 ± √28</span>', en: '<span class="math-display">2 ± √28</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=1, b=-4, c=-3. Δ = 16+12 = 28. x = (4 ± √28)/2 = (4 ± 2√7)/2 = 2 ± √7', en: 'a=1, b=-4, c=-3. Δ = 28. x = (4 ± 2√7)/2 = 2 ± √7' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 23:</strong> حُلّ المعادلة <span class="math-display">2x² - 8x + 3 = 0</span> باستخدام القانون العام.', en: '<strong>Question 23:</strong> Solve <span class="math-display">2x² - 8x + 3 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">(4 ± √10) / 2</span>', en: '<span class="math-display">(4 ± √10) / 2</span>' },
+                        { ar: '<span class="math-display">(-4 ± √10) / 2</span>', en: '<span class="math-display">(-4 ± √10) / 2</span>' },
+                        { ar: '<span class="math-display">(8 ± √40) / 4</span>', en: '<span class="math-display">(8 ± √40) / 4</span>' },
+                        { ar: '<span class="math-display">(4 ± √40) / 2</span>', en: '<span class="math-display">(4 ± √40) / 2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=2, b=-8, c=3. Δ = 64-24 = 40. x = (8 ± √40)/4 = (8 ± 2√10)/4 = (4 ± √10)/2', en: 'a=2, b=-8, c=3. Δ = 40. x = (8 ± 2√10)/4 = (4 ± √10)/2' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 24:</strong> حُلّ المعادلة <span class="math-display">3x² + 2x - 4 = 0</span> باستخدام القانون العام.', en: '<strong>Question 24:</strong> Solve <span class="math-display">3x² + 2x - 4 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">(-1 ± √13) / 3</span>', en: '<span class="math-display">(-1 ± √13) / 3</span>' },
+                        { ar: '<span class="math-display">(1 ± √13) / 3</span>', en: '<span class="math-display">(1 ± √13) / 3</span>' },
+                        { ar: '<span class="math-display">(-2 ± √52) / 6</span>', en: '<span class="math-display">(-2 ± √52) / 6</span>' },
+                        { ar: '<span class="math-display">(-1 ± √37) / 3</span>', en: '<span class="math-display">(-1 ± √37) / 3</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=3, b=2, c=-4. Δ = 4+48 = 52. x = (-2 ± √52)/6 = (-2 ± 2√13)/6 = (-1 ± √13)/3', en: 'a=3, b=2, c=-4. Δ = 52. x = (-2 ± 2√13)/6 = (-1 ± √13)/3' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 25:</strong> حُلّ المعادلة <span class="math-display">x² + 2x - 6 = 0</span> باستخدام القانون العام.', en: '<strong>Question 25:</strong> Solve <span class="math-display">x² + 2x - 6 = 0</span> using the quadratic formula.' },
+                    options: [
+                        { ar: '<span class="math-display">-1 ± √7</span>', en: '<span class="math-display">-1 ± √7</span>' },
+                        { ar: '<span class="math-display">1 ± √7</span>', en: '<span class="math-display">1 ± √7</span>' },
+                        { ar: '<span class="math-display">-2 ± √7</span>', en: '<span class="math-display">-2 ± √7</span>' },
+                        { ar: '<span class="math-display">-1 ± √28</span>', en: '<span class="math-display">-1 ± √28</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'a=1, b=2, c=-6. Δ = 4+24 = 28. x = (-2 ± √28)/2 = (-2 ± 2√7)/2 = -1 ± √7', en: 'a=1, b=2, c=-6. Δ = 28. x = (-2 ± 2√7)/2 = -1 ± √7' }
+                }
+            ]
+        },
+        {
+            id: 'sec6',
+            title: { ar: '🔹 القسم 6: مسائل مركبة وتطبيقات (Q26-Q30)', en: '🔹 Section 6: Mixed Problems & Applications (Q26-Q30)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 26:</strong> ما قيمة المميز للمعادلة <span class="math-display">x² + 8x + 16 = 0</span>؟', en: '<strong>Question 26:</strong> What is the discriminant of <span class="math-display">x² + 8x + 16 = 0</span>?' },
+                    svg: svgGraphs.discriminant_visual,
+                    options: [
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">64</span>', en: '<span class="math-display">64</span>' },
+                        { ar: '<span class="math-display">128</span>', en: '<span class="math-display">128</span>' },
+                        { ar: '<span class="math-display">-64</span>', en: '<span class="math-display">-64</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'Δ = b² - 4ac = 64 - 4(1)(16) = 64 - 64 = 0', en: 'Δ = 64 - 64 = 0' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 27:</strong> ما قيمة المميز للمعادلة <span class="math-display">2x² + 6x - 7 = 0</span>؟', en: '<strong>Question 27:</strong> What is the discriminant of <span class="math-display">2x² + 6x - 7 = 0</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">92</span>', en: '<span class="math-display">92</span>' },
+                        { ar: '<span class="math-display">-20</span>', en: '<span class="math-display">-20</span>' },
+                        { ar: '<span class="math-display">20</span>', en: '<span class="math-display">20</span>' },
+                        { ar: '<span class="math-display">36</span>', en: '<span class="math-display">36</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'Δ = 36 - 4(2)(-7) = 36 + 56 = 92', en: 'Δ = 36 + 56 = 92' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 28:</strong> أي معادلة لها حل واحد فقط (Δ = 0)؟', en: '<strong>Question 28:</strong> Which equation has only one solution (Δ = 0)?' },
+                    options: [
+                        { ar: '<span class="math-display">x² + 8x + 16 = 0</span>', en: '<span class="math-display">x² + 8x + 16 = 0</span>' },
+                        { ar: '<span class="math-display">x² + 5x + 6 = 0</span>', en: '<span class="math-display">x² + 5x + 6 = 0</span>' },
+                        { ar: '<span class="math-display">x² + 4x + 2 = 0</span>', en: '<span class="math-display">x² + 4x + 2 = 0</span>' },
+                        { ar: '<span class="math-display">x² + 2x + 3 = 0</span>', en: '<span class="math-display">x² + 2x + 3 = 0</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² + 8x + 16: Δ = 64-64 = 0. الباقي: Δ = 25-24=1, Δ = 16-8=8, Δ = 4-12=-8', en: 'x² + 8x + 16: Δ = 0. Others: Δ = 1, 8, -8' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 29:</strong> أي معادلة ليس لها حلول حقيقية؟', en: '<strong>Question 29:</strong> Which equation has no real solutions?' },
+                    options: [
+                        { ar: '<span class="math-display">x² + 2x + 3 = 0</span>', en: '<span class="math-display">x² + 2x + 3 = 0</span>' },
+                        { ar: '<span class="math-display">x² + 4x + 3 = 0</span>', en: '<span class="math-display">x² + 4x + 3 = 0</span>' },
+                        { ar: '<span class="math-display">x² - 4x + 3 = 0</span>', en: '<span class="math-display">x² - 4x + 3 = 0</span>' },
+                        { ar: '<span class="math-display">x² + 6x + 9 = 0</span>', en: '<span class="math-display">x² + 6x + 9 = 0</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x² + 2x + 3: Δ = 4-12 = -8 < 0. لا حلول حقيقية. الباقي: Δ = 4, 4, 0', en: 'x² + 2x + 3: Δ = -8 < 0. No real solutions. Others: Δ = 4, 4, 0' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 30:</strong> ما الخطوات الصحيحة لحل معادلة تربيعية بالقانون العام؟', en: '<strong>Question 30:</strong> What are the correct steps to solve a quadratic using the formula?' },
+                    svg: svgGraphs.step_by_step,
+                    options: [
+                        { ar: 'حدد a,b,c → احسب Δ → طبّق القانون → بسّط', en: 'Identify a,b,c → Calculate Δ → Apply formula → Simplify' },
+                        { ar: 'طبّق القانون مباشرة → بسّط', en: 'Apply formula directly → Simplify' },
+                        { ar: 'حلل أولاً → ثم طبّق القانون', en: 'Factor first → Then apply formula' },
+                        { ar: 'احسب Δ فقط', en: 'Calculate Δ only' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'الخطوات الصحيحة: 1) حدد a,b,c 2) احسب Δ = b²-4ac 3) طبّق القانون 4) بسّط النتيجة', en: 'Correct steps: 1) Identify a,b,c 2) Calculate Δ 3) Apply formula 4) Simplify' }
+                }
+            ]
+        }
+    ]
+};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(originalExamData));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function reshuffleExam() {
+    const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟' : '🔄 New questions will be generated. Are you sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+        prepareShuffledExam(); renderExam(); saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    
+    document.querySelectorAll('[data-ar]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + lang);
+    });
+    
+    document.querySelectorAll('[data-placeholder-ar]').forEach(el => {
+        el.placeholder = el.getAttribute('data-placeholder-' + lang);
+    });
+    
+    renderExam(); saveState(false);
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['a)', 'b)', 'c)', 'd)'], answer: '✅ الإجابة:' }, en: { option: ['a)', 'b)', 'c)', 'd)'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.sections.forEach((section, secIdx) => {
+        const badgeClass = ['module-1', 'module-2', 'module-3', 'module-4', 'module-5', 'module-6'][secIdx];
+        html += '<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">';
+        html += '<div class="text-center mb-4"><span class="module-badge ' + badgeClass + '">' + section.title[currentLang] + '</span></div>';
+        html += '<ol class="space-y-4 text-sm">';
+        
+        section.questions.forEach((q) => {
+            html += '<li class="border-r-4 border-amber-400 pr-4 py-2" id="q-' + globalIdx + '" style="border-right: 4px solid #d97706; padding-right: 1rem;">';
+            html += '<strong class="text-amber-700">' + (globalIdx + 1) + '.</strong> ' + q.q[currentLang] + '<br>';
+            if (q.svg) html += '<div class="graph-container">' + q.svg + '</div>';
+            
+            q.options.forEach((opt, oIdx) => {
+                html += '<label class="cursor-pointer block mt-2 mr-4 hover:bg-amber-50 rounded-lg p-2 transition" style="margin-right: 1rem;">';
+                html += '<input type="radio" name="q' + globalIdx + '" value="' + String.fromCharCode(97 + oIdx) + '" class="mr-2 ml-2">';
+                html += '<span class="arabic-math">' + lbl.option[oIdx] + ' ' + opt[currentLang] + '</span>';
+                html += '</label>';
+            });
+            
+            html += '<div class="answer-box text-green-700 mt-3 font-medium ' + (answersVisible ? '' : 'hidden') + ' bg-green-50 rounded-lg p-3 border border-green-200">';
+            html += lbl.answer + ' ' + lbl.option[q.correct] + ' <span class="arabic-math">' + q.options[q.correct][currentLang] + '</span><br>';
+            html += '<span class="text-sm text-green-700 mt-2 block arabic-math">' + q.answer[currentLang] + '</span>';
+            html += '</div></li>';
+            globalIdx++;
+        });
+        
+        html += '</ol></section>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState(false);
+        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState(false);
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+    
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const sel = document.querySelector('input[name="q'+i+'"]:checked');
+        const li = document.getElementById('q-' + i);
+        if (li) {
+            const isCorrect = sel && sel.value === correctAnswersMap[i];
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+    
+    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+    document.getElementById('res-total').textContent = score + ' / 100';
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    examData.sections.forEach((s, idx) => {
+        pc.innerHTML += '<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">' + s.title[currentLang] + '</span><span class="font-bold text-amber-700">' + sectionScores[idx] + '/' + QUESTIONS_PER_SECTION + '</span></div>';
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = score + '%';
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = '🌟 Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+    
+    const name = document.getElementById('studentName').value || 'N/A';
+    const studentClass = document.getElementById('studentClass').value || 'N/A';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '<div style="font-family:Arial; direction:rtl;">';
+    questionsHTML += '<h2>📐 ' + (currentLang === 'ar' ? 'نتيجة امتحان القانون العام' : 'Quadratic Formula Exam Result') + '</h2>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الاسم' : 'Name') + ':</strong> ' + name + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الشعبة' : 'Class') + ':</strong> ' + studentClass + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التاريخ' : 'Date') + ':</strong> ' + date + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الدرجة' : 'Score') + ':</strong> ' + score + ' (' + successRate + '%)</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التقدير' : 'Grade') + ':</strong> ' + badge + '</p>';
+    questionsHTML += '<hr><h3>' + (currentLang === 'ar' ? 'تفاصيل الإجابات:' : 'Answer Details:') + '</h3><table style="width:100%; border-collapse:collapse;">';
+    questionsHTML += '<tr style="background:#d97706; color:white;"><th style="padding:8px; border:1px solid #ddd;">#</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'السؤال' : 'Question') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'إجابة الطالب' : 'Student Answer') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'الصحيحة' : 'Correct') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'النتيجة' : 'Result') + '</th></tr>';
+    
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        questionsHTML += '<tr style="background:#fef3c7;"><td colspan="5" style="padding:8px; font-weight:bold; border:1px solid #ddd;">' + section.title.ar + '</td></tr>';
+        section.questions.forEach((q) => {
+            const sel = document.querySelector('input[name="q'+globalIdx+'"]:checked');
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            let sat = currentLang === 'ar' ? '❌ لم يجب' : '❌ No answer';
+            let sac = '#dc2626';
+            if (sv) {
+                const si = sv.charCodeAt(0) - 97;
+                sat = q.options[si][currentLang];
+                sac = ic ? '#16a34a' : '#dc2626';
+            }
+            const cat = q.options[q.correct][currentLang];
+            const rb = ic ? '#f0fdf4' : '#fef2f2';
+            questionsHTML += '<tr style="background:' + rb + ';"><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (globalIdx+1) + '</td><td style="padding:8px; border:1px solid #ddd;">' + q.q.ar.replace(/<[^>]+>/g, '').substring(0, 80) + '...</td><td style="padding:8px; border:1px solid #ddd; color:' + sac + ';">' + sat + '</td><td style="padding:8px; border:1px solid #ddd; color:#16a34a;">' + cat + '</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (ic?'✅':'❌') + '</td></tr>';
+            globalIdx++;
+        });
+    });
+    questionsHTML += '</table></div>';
+    
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        grade: badge,
+        answers_table: questionsHTML
+    };
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = currentLang === 'ar' ? '✅ تم الإرسال بنجاح!' : '✅ Sent successfully!';
+            status.style.color = '#16a34a';
+            btn.textContent = currentLang === 'ar' ? '✓ تم' : '✓ Sent';
+            alert(currentLang === 'ar' ? 'تم إرسال النتيجة للمعلم بنجاح!' : 'Result sent to teacher successfully!');
+        })
+        .catch((error) => {
+            status.textContent = currentLang === 'ar' ? '❌ فشل الإرسال' : '❌ Failed to send';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = currentLang === 'ar' ? '📧 حاول مرة أخرى' : '📧 Try Again';
+            alert(currentLang === 'ar' ? 'فشل الإرسال: ' + error.text : 'Failed: ' + error.text);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved && saved.seed) {
+        currentSeed = saved.seed;
+        currentLang = saved.lang || 'ar';
+        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+        answersVisible = saved.answersVisible || false;
+    } else {
+        currentSeed = Date.now();
+    }
+    
+    document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+    document.body.classList.toggle('en-mode', currentLang === 'en');
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+    
+    document.querySelectorAll('[data-ar]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + currentLang);
+    });
+    
+    document.querySelectorAll('[data-placeholder-ar]').forEach(el => {
+        el.placeholder = el.getAttribute('data-placeholder-' + currentLang);
+    });
+    
+    prepareShuffledExam();
+    renderExam();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        if (saved.answers) restoreAnswers(saved.answers);
+    }
+    setupAnswerListeners();
+    setupInputListeners();
+    startTimer();
+});
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
